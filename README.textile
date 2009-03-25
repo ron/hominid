@@ -16,7 +16,7 @@ Clone from the Github repository:
 
 Use the GemPlugin:
 
-<pre><code>config.gem "bgetting-hominid", :version => '~> 0.0.1', :lib => 'hominid', :source => "http://gems.github.com"</code></pre>
+<pre><code>config.gem "bgetting-hominid", :version => '~> 0.0.2', :lib => 'hominid', :source => "http://gems.github.com"</code></pre>
 
 h2. Example
 

@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = %q{Hominid is a Rails GemPlugin for interacting with the Mailchimp API.}
   s.email = %q{brian@terra-firma-design.com}
   s.files = []
-  s.has_rdoc = false
+  s.has_rdoc = true
   s.homepage = %q{http://github.com/bgetting/hominid}
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{hominid}

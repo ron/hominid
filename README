@@ -14,7 +14,7 @@ In your environment.rb file:
 config.gem "bgetting-hominid", :version => '~> 1.0.2', :lib => 'hominid', :source => "http://gems.github.com"
 
 
-
-
+=======
+Big thanks to Kelly Mahan and all the people working on the MailGorilla plugin. This GemPlugin is basically a mesh of that plugin, my own acts_as_mailchimp plugin (which is going to be updated to use this gemplugin), and the ruby_mailchimp gem.
 
 Copyright (c) 2009 Brian Getting, released under the MIT license

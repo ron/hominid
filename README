@@ -1,0 +1,20 @@
+Hominid
+=======
+
+This is a GemPlugin wrapper to the MailChimp API functionality. Not all campaign methods are supported yet.
+
+The Hominid plugin expects to find a YAML file located at /config/monkey_brains.yml which contains MailChimp account information for each environment. If you are using as a GemPlugin, you need to be sure to create this file.
+
+
+Example
+=======
+
+In your environment.rb file:
+
+config.gem "bgetting-hominid", :version => '~> 1.0.2', :lib => 'hominid', :source => "http://gems.github.com"
+
+
+
+
+
+Copyright (c) 2009 Brian Getting, released under the MIT license

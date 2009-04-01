@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{hominid}
-  s.version = "1.0.4"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Getting"]
-  s.date = %q{2009-03-26}
+  s.date = %q{2009-04-01}
   s.description = %q{Hominid is a Rails GemPlugin for interacting with the Mailchimp API}
   s.email = %q{brian@terra-firma-design.com}
   s.extra_rdoc_files = ["README.textile"]

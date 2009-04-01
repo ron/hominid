@@ -1,6 +1,6 @@
 h1. Hominid
 
-Hominid is a GemPlugin wrapper to the Mailchimp API. 
+Hominid is a GemPlugin wrapper to the "Mailchimp API":http://www.mailchimp.com/api/1.2/.
 
 h2. Installation
 
@@ -44,6 +44,10 @@ To unsubscribe someone:
 <pre><code>@hominid.unsubscribe(@list_id, "email@example.com")</code></pre>
 
 To update a list member:
+
+<pre><code>@hominid.subscribe(@list_id, "email@example.com", {:FNAME => 'Robert', :EMAIL => 'another@example.com'}, 'html', true)</code></pre>
+
+_or_
 
 <pre><code>@hominid.update_member(@list_id, "email@example.com", {:FNAME => 'Robert', :EMAIL => 'another@example.com'})</code></pre>
 

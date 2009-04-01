@@ -2,7 +2,7 @@ require 'xmlrpc/client'
 
 class Hominid
   
-  # MailChimp API Documentation: http://www.mailchimp.com/api/1.1/
+  # MailChimp API Documentation: http://www.mailchimp.com/api/1.2/
   
   def initialize(autologin = true)
     load_monkey_brains
@@ -21,7 +21,7 @@ class Hominid
   
   def login
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.1/")
+      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
       @api_key = @chimpApi.call("login", @chimpUsername, @chimpPassword)
     rescue
       puts "***** Mail Chimp Error *****"
@@ -33,7 +33,7 @@ class Hominid
   
   def add_api_key(key)
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.1/")
+      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
       @chimpApi.call("apikeyAdd", @chimpUsername, @chimpPassword, key)
     rescue
       false
@@ -42,7 +42,7 @@ class Hominid
   
   def expire_api_key(key)
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.1/")
+      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
       @chimpApi.call("apikeyExpire", @chimpUsername, @chimpPassword, key)
     rescue
       false
@@ -51,7 +51,7 @@ class Hominid
   
   def api_keys(include_expired = false)
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.1/")
+      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
       @api_keys = @chimpApi.call("apikeys", @chimpUsername, @chimpPassword, @api_key, include_expired)
     rescue
       return nil
@@ -69,14 +69,23 @@ class Hominid
     end
   end
   
-  def campaigns(list_id = nil)
-    # Get the campaigns for this account (optionally for a specific list)
+  def campaigns(filters = {}, start = 0, limit = 50)
+    # Get the campaigns for this account
+    # API Version 1.2 requires that filters be sent as a hash
+    # Available options for the filters hash are:
+    #
+    #   :campaign_id    = (string)  The ID of the campaign you wish to return. 
+    #   :list_id        = (string)  Show only campaigns with this list_id. 
+    #   :folder_id      = (integer) Show only campaigns from this folder.
+    #   :from_name      = (string)  Show only campaigns with this from_name.
+    #   :from_email     = (string)  Show only campaigns with this from_email.
+    #   :title          = (string)  Show only campaigns with this title.
+    #   :subject        = (string)  Show only campaigns with this subject.
+    #   :sedtime_start  = (string)  Show campaigns sent after YYYY-MM-DD HH:mm:ss.
+    #   :sendtime_end   = (string)  Show campaigns sent before YYYY-MM-DD HH:mm:ss.
+    #   :subject        = (boolean) Filter by exact values, or search within content for filter values.
     begin
-      if list_id
-        @campaigns = @chimpApi.call("campaigns", @api_key, list_id)
-      else
-        @campaigns = @chimpApi.call("campaigns", @api_key)
-      end
+      @campaigns = @chimpApi.call("campaigns", @api_key, filters, start, limit)
     rescue
       return nil
     end
@@ -249,10 +258,19 @@ class Hominid
     end
   end
   
-  def members(list_id, status = "subscribed")
+  def members(list_id, status = "subscribed", since = "2000-01-01 00:00:00", start = 0, limit = 100)
     # Get members of a list based on status
+    # Select members based on one of the following statuses:
+    #   'subscribed'
+    #   'unsubscribed'
+    #   'cleaned'
+    #   'updated'
+    #
+    # Select members that have updated their status or profile by providing
+    # a "since" date in the format of YYYY-MM-DD HH:MM:SS
+    # 
     begin
-      @members = @chimpApi.call("listMembers", @api_key, list_id, status)
+      @members = @chimpApi.call("listMembers", @api_key, list_id, status, since, start, limit)
     rescue
       return nil
     end
@@ -267,10 +285,10 @@ class Hominid
     end
   end
   
-  def subscribe(list_id, email, user_info = {}, email_type = "html")
+  def subscribe(list_id, email, user_info = {}, email_type = "html", update_existing = true, replace_interests = true)
     # Subscribe a member
     begin
-      @chimpApi.call("listSubscribe", @api_key, list_id, email, user_info, email_type, @double_opt)
+      @chimpApi.call("listSubscribe", @api_key, list_id, email, user_info, email_type, @double_opt, update_existing, replace_interests)
     rescue
       false
     end

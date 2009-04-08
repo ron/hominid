@@ -5,7 +5,7 @@ development:
   send_notify: false
   double_opt: false
 
-testing:
+test:
   username: 
   password:
   send_goodbye: false

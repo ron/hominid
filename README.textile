@@ -4,7 +4,7 @@ Hominid is a GemPlugin wrapper to the "Mailchimp API":http://www.mailchimp.com/a
 
 h2. Installation
 
-There are a few options for installing Hominid. Please note that Hominid expects to find a configuration file at @/config/hominid.yml@. If you are using Hominid as a GemPlugin, you will need to be sure and create this file. If you are using Hominid as a normal Rails plugin, this file will be created automatically when the plugin is installed.
+There are a few options for installing Hominid.
 
 Install as a Rails plugin:
 
@@ -17,6 +17,10 @@ Clone from the Github repository:
 Use the GemPlugin:
 
 <pre><code>config.gem "bgetting-hominid", :lib => 'hominid', :source => "http://gems.github.com"</code></pre>
+
+h2. Configuration
+
+Please note that Hominid expects to find a configuration file at @/config/hominid.yml@. If you are using Hominid as a GemPlugin, you will need to be sure and create this file. If you are using Hominid as a normal Rails plugin, this file will be created automatically when the plugin is installed. You will need to create a Mailchimp account and put your API key (available at "http://admin.mailchimp.com/account/api/":http://admin.mailchimp.com/account/api/) into the configuration file. 
 
 h2. Example
 

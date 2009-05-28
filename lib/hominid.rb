@@ -3,10 +3,11 @@ require 'xmlrpc/client'
 class Hominid
   
   # MailChimp API Documentation: http://www.mailchimp.com/api/1.2/
+  MAILCHIMP_API = "http://api.mailchimp.com/1.2/"
   
-  def initialize(autologin = true)
+  def initialize
     load_monkey_brains
-    login if autologin
+    @chimpApi ||= XMLRPC::Client.new2(MAILCHIMP_API)
     return self
   end
   
@@ -14,36 +15,27 @@ class Hominid
     config = YAML.load(File.open("#{RAILS_ROOT}/config/hominid.yml"))[RAILS_ENV].symbolize_keys
     @chimpUsername  = config[:username].to_s
     @chimpPassword  = config[:password].to_s
+    @api_key        = config[:api_key]
     @send_goodbye   = config[:send_goodbye]
     @send_notify    = config[:send_notify]
     @double_opt     = config[:double_opt]
   end
   
-  def login
-    begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
-      @api_key = @chimpApi.call("login", @chimpUsername, @chimpPassword)
-    rescue
-      puts "***** Mail Chimp Error *****"
-      puts "Connection: #{@chimpApi}"
-      puts "Login: #{@chimpUsername}"
-      puts "Password: #{@chimpPassword}"
-    end
-  end
+  ## Security related methods
   
-  def add_api_key(key)
+  def add_api_key
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
-      @chimpApi.call("apikeyAdd", @chimpUsername, @chimpPassword, key)
+      @chimpApi ||= XMLRPC::Client.new2(MAILCHIMP_API)
+      @chimpApi.call("apikeyAdd", @chimpUsername, @chimpPassword, @api_key)
     rescue
       false
     end
   end
   
-  def expire_api_key(key)
+  def expire_api_key
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
-      @chimpApi.call("apikeyExpire", @chimpUsername, @chimpPassword, key)
+      @chimpApi ||= XMLRPC::Client.new2(MAILCHIMP_API)
+      @chimpApi.call("apikeyExpire", @chimpUsername, @chimpPassword, @api_key)
     rescue
       false
     end
@@ -51,7 +43,7 @@ class Hominid
   
   def api_keys(include_expired = false)
     begin
-      @chimpApi ||= XMLRPC::Client.new2("http://api.mailchimp.com/1.2/")
+      @chimpApi ||= XMLRPC::Client.new2(MAILCHIMP_API)
       @api_keys = @chimpApi.call("apikeys", @chimpUsername, @chimpPassword, @api_key, include_expired)
     rescue
       return nil
@@ -207,7 +199,7 @@ class Hominid
   def create_group(list_id, group)
     # Add an interest group to a list
     begin
-      @chimpApi.call("listInterestGroupAdd", @api_key, group)
+      @chimpApi.call("listInterestGroupAdd", @api_key, list_id, group)
     rescue
       false
     end
@@ -216,7 +208,7 @@ class Hominid
   def create_tag(list_id, tag, name, required = false)
     # Add a merge tag to a list
     begin
-      @chimpApi.call("listMergeVarAdd", @api_key, tag, name, required)
+      @chimpApi.call("listMergeVarAdd", @api_key, list_id, tag, name, required)
     rescue
       false
     end
@@ -225,7 +217,7 @@ class Hominid
   def delete_group(list_id, group)
     # Delete an interest group for a list
     begin
-      @chimpApi.call("listInterestGroupDel", @api_key, group)
+      @chimpApi.call("listInterestGroupDel", @api_key, list_id, group)
     rescue
       false
     end
@@ -234,7 +226,7 @@ class Hominid
   def delete_tag(list_id, tag)
     # Delete a merge tag and all its members
     begin
-      @chimpApi.call("listMergeVarDel", @api_key, tag)
+      @chimpApi.call("listMergeVarDel", @api_key, list_id, tag)
     rescue
       false
     end

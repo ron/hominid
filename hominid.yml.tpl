@@ -1,20 +1,24 @@
+# Get your API key at http://admin.mailchimp.com/account/api/
 development:
-  username: 
-  password:
+  username:
+  password: 
+  api_key: 
   send_goodbye: false
   send_notify: false
   double_opt: false
 
 test:
-  username: 
+  username:
   password:
+  api_key: 
   send_goodbye: false
   send_notify: false
   double_opt: false
 
 production:
-  username: 
+  username:
   password:
+  api_key: 
   send_goodbye: false
   send_notify: false
   double_opt: false

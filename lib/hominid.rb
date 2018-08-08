@@ -3,7 +3,7 @@ require 'xmlrpc/client'
 class Hominid
   
   # MailChimp API Documentation: http://www.mailchimp.com/api/1.2/
-  MAILCHIMP_API = "http://api.mailchimp.com/1.2/"
+  MAILCHIMP_API = "https://api.mailchimp.com/1.2/"
   
   def initialize(config=nil)
     load_monkey_brains(config)
